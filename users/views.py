@@ -8,6 +8,7 @@ from django.db.models import Q
 from .models import Profile
 from .forms import CustomUserCreationForm, ProfileForm, SkillForm
 from .utils import searchProfiles
+from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 
 
 def loginUser(request):
@@ -68,7 +69,20 @@ def registerUser(request):
 
 def profiles(request):
     profiles, search_query = searchProfiles(request)
-    context = {'profiles': profiles, 'search_query': search_query}
+
+    page = request.GET.get('page')
+    paginator = Paginator(profiles, 6)
+
+    try:
+        profiles = paginator.page(page)
+    except PageNotAnInteger:
+        page = 1
+        profiles = paginator.page(page)
+    except EmptyPage:
+        page = paginator.num_pages
+        profiles = paginator.page(page)
+
+    context = {'profiles': profiles, 'search_query': search_query, 'paginator': paginator}
     return render(request, 'users/profiles.html', context)
 
 
