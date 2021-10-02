@@ -1,4 +1,5 @@
 {% extends 'main.html' %}
+
 {% block content %}
 
 <!-- Main Section -->
@@ -8,10 +9,10 @@
                 <a class="backButton" href="{% url 'account' %}"><i class="im im-angle-left"></i></a>
                 <br>
 
-                <form class="form" method="POST" enctype="multipart/form-data">
+                <form class="form" method="POST" action="">
                     {% csrf_token %}
-
                     {% for field in form %}
+
                     <div class="form__field">
                         <label for="formInput#text">{{field.label}} </label>
                         {{field}}
